@@ -20,18 +20,27 @@ contract FCPredictionRewardingContract {
     address rewardNFT;
     uint256 rewardIndex;
     uint256 nftTokenId;
+    address proxy;
 
-    constructor(address currencyAddress, uint256 price, uint256 period, address rewardNFTAddress) {
+    constructor(address currencyAddress, uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress) {
         currency = currencyAddress;
         expectedPrice = price;
         expireBlock = block.number + period;
         rewardNFT = rewardNFTAddress;
         nftTokenId = 0;
+        proxy = proxyAddress;
     }
 
     // Make it general
     // Current Option: 1: long 2: short
-    function attest(address user, uint256 option) public {
+    function attest(uint256 option) public {
+        userOptions[msg.sender] = option;
+        predictionChecked[msg.sender] = false;
+    }
+
+    function attestByProxy(address user, uint256 option) public {
+        // authenticate first
+        require(msg.sender == proxy, "non-proxy-address");
         userOptions[user] = option;
         predictionChecked[user] = false;
     }

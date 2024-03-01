@@ -1,13 +1,13 @@
-## Foundry
+## Farcaster Market Prediction Smart Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+**This contract will enable the on-chain market prediction app in a decentralized social way **
 
-Foundry consists of:
+The contract are 
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+* Attest: record an address's price prediction value on-chain
+* Compare Price with Oracle
+* Rewarding: distribute the rewards to the winers
+
 
 ## Documentation
 

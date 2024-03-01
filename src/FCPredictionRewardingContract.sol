@@ -19,15 +19,15 @@ contract FCPredictionRewardingContract {
     uint256 expireBlock; // cannot attest after this block
     address rewardNFT;
     uint256 rewardIndex;
-    uint256 nftTokenId;
     address proxy;
+
+    event attestPrice(address user, address currency, uint256 option);
 
     constructor(address currencyAddress, uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress) {
         currency = currencyAddress;
         expectedPrice = price;
         expireBlock = block.number + period;
         rewardNFT = rewardNFTAddress;
-        nftTokenId = 0;
         proxy = proxyAddress;
     }
 
@@ -36,6 +36,8 @@ contract FCPredictionRewardingContract {
     function attest(uint256 option) public {
         userOptions[msg.sender] = option;
         predictionChecked[msg.sender] = false;
+        attest(option);
+        emit attestPrice(msg.sender, currency, option);
     }
 
     function attestByProxy(address user, uint256 option) public {
@@ -43,13 +45,26 @@ contract FCPredictionRewardingContract {
         require(msg.sender == proxy, "non-proxy-address");
         userOptions[user] = option;
         predictionChecked[user] = false;
+        emit attestPrice(user, currency, option);
     }
 
     function compareWithOracle(address user) private returns (bool) {
-        return true;
+        uint256 oraclePrice = 50000;
+        uint256 userOption = userOptions[user];
+        if (userOption == 1) {
+            if (oraclePrice > expectedPrice) 
+              return true;
+            else
+              return false;
+        } else {
+            if (oraclePrice > expectedPrice) 
+              return false;
+            else
+              return true;
+        }
     }
 
-    function awardUser(address user) public {
+    function awardUser(address user, uint256 tokenIdToMint) public {
         if (predictionChecked[user] == true) {
             revert("user-already-checked");
         }
@@ -58,7 +73,6 @@ contract FCPredictionRewardingContract {
         }
         // if win
         predictionChecked[user] = true;
-        IERC721Mintable(rewardNFT).mint(user, nftTokenId); // Todo: make it secure
-        nftTokenId++;
+        IERC721Mintable(rewardNFT).mint(user, tokenIdToMint);
     }
 }

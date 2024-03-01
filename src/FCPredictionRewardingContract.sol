@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "./interfaces/IERC721Mintable.sol";
 
 /** 
  * FCPredictionRewardingContract
@@ -35,11 +36,11 @@ contract FCPredictionRewardingContract {
         predictionChecked[user] = false;
     }
 
-    function compareWithOracle(address user) private {
+    function compareWithOracle(address user) private returns (bool) {
         return true;
     }
 
-    function awardUser(user) public {
+    function awardUser(address user) public {
         if (predictionChecked[user] == true) {
             revert("user-already-checked");
         }
@@ -48,7 +49,7 @@ contract FCPredictionRewardingContract {
         }
         // if win
         predictionChecked[user] = true;
-        IERC721(rewardNFT).mint(user, nftTokenId);
+        IERC721Mintable(rewardNFT).mint(user, nftTokenId); // Todo: make it secure
         nftTokenId++;
     }
 }

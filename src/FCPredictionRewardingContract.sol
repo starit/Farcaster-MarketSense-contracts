@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./interfaces/IERC721Mintable.sol";
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 /** 
  * FCPredictionRewardingContract
@@ -20,15 +21,21 @@ contract FCPredictionRewardingContract {
     address rewardNFT;
     uint256 rewardIndex;
     address proxy;
+    address dataFeedAddress;
+    AggregatorV3Interface internal dataFeed;
+
 
     event attestPrice(address user, address currency, uint256 option);
 
-    constructor(address currencyAddress, uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress) {
+    constructor(address currencyAddress, uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress, address dataFeedAddress_) {
         currency = currencyAddress;
         expectedPrice = price;
         expireBlock = block.number + period;
         rewardNFT = rewardNFTAddress;
         proxy = proxyAddress;
+        dataFeed = AggregatorV3Interface(
+            dataFeedAddress_
+        );
     }
 
     // Make it general
@@ -36,7 +43,6 @@ contract FCPredictionRewardingContract {
     function attest(uint256 option) public {
         userOptions[msg.sender] = option;
         predictionChecked[msg.sender] = false;
-        attest(option);
         emit attestPrice(msg.sender, currency, option);
     }
 
@@ -48,8 +54,8 @@ contract FCPredictionRewardingContract {
         emit attestPrice(user, currency, option);
     }
 
-    function compareWithOracle(address user) private returns (bool) {
-        uint256 oraclePrice = 50000;
+    function compareWithOracle(address user) private view returns (bool) {
+        uint256 oraclePrice = getPriceFromOracle();
         uint256 userOption = userOptions[user];
         if (userOption == 1) {
             if (oraclePrice > expectedPrice) 
@@ -63,6 +69,20 @@ contract FCPredictionRewardingContract {
               return true;
         }
     }
+
+    // Chainlink Oracle Price Feed
+    function getPriceFromOracle() public view returns (uint256) {
+        // prettier-ignore
+        (
+            /* uint80 roundID */,
+            int answer,
+            /*uint startedAt*/,
+            /*uint timeStamp*/,
+            /*uint80 answeredInRound*/
+        ) = dataFeed.latestRoundData();
+        return uint256(answer);
+    }
+    
 
     function awardUser(address user, uint256 tokenIdToMint) public {
         if (predictionChecked[user] == true) {

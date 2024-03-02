@@ -24,6 +24,8 @@ contract FCPredictionRewardingContract {
     AggregatorV3Interface internal dataFeed;
 
     event attestPrice(address user, uint256 option);
+    event chainLinkPrice(uint256 answer);
+
 
     constructor(uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress, address dataFeedAddress_) {
         expectedPrice = price;
@@ -52,8 +54,10 @@ contract FCPredictionRewardingContract {
         emit attestPrice(user, option);
     }
 
-    function compareWithOracle(address user) private view returns (bool) {
+    function compareWithOracle(address user) private returns (bool) {
         uint256 oraclePrice = getPriceFromOracle();
+        emit chainLinkPrice(oraclePrice);
+
         uint256 userOption = userOptions[user];
         if (userOption == 1) {
             if (oraclePrice > expectedPrice) 

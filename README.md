@@ -1,12 +1,15 @@
 ## Farcaster Market Prediction Smart Contracts
 
-**This contract will enable the on-chain market prediction app in a decentralized social way **
-
-The contract are 
+This contract will enable the on-chain market prediction app in a decentralized social way
 
 * Attest: record an address's price prediction value on-chain
 * Compare Price with Oracle
-* Rewarding: distribute the rewards to the winers
+* Rewarding: distribute the rewards to the winners
+
+
+## Architecture
+
+![Farcaster MarketSense Architecture](./static/farcaster-marketsense-architecture.png)
 
 ## Related Repos
 

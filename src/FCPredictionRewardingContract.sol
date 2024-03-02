@@ -21,7 +21,6 @@ contract FCPredictionRewardingContract {
     address public rewardNFT;
     uint256 public rewardIndex;
     address public proxy;
-    address public dataFeedAddress;
     AggregatorV3Interface internal dataFeed;
 
     event attestPrice(address user, uint256 option);
@@ -105,13 +104,22 @@ contract FCPredictionRewardingContract {
         expectedPrice = newPrice;
     }
 
-    function setexpireBlock(uint256 newBlockNumber) public {
+    function setExpireBlock(uint256 newBlockNumber) public {
         require(msg.sender == owner, "not-owner");
         expireBlock = newBlockNumber;
+    }
+
+    function setDataFeedAddress(address newDataFeedAddress) public {
+        require(msg.sender == owner, "not-owner");
+        dataFeed = AggregatorV3Interface(
+            newDataFeedAddress
+        );    
     }
 
     function setOwner(address newOwner) public {
         require(msg.sender == owner, "not-owner");
         owner = newOwner;
     }
+
+    
 }

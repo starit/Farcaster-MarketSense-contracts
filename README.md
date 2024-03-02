@@ -35,6 +35,12 @@ https://data.chain.link/feeds?categories=Crypto
 * Pull Contract: `0x41AB2059bAA4b73E9A3f55D30Dff27179e0eA181`
 * Storage Contract: `0xD02cc7a670047b6b012556A88e275c685d25e0c9`
 
+
+## Related Assets Address
+
+* Base WBTC: `0x1ceA84203673764244E05693e42E6Ace62bE9BA5`
+* 
+
 ## Documentation
 
 https://book.getfoundry.sh/

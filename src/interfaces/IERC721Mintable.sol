@@ -12,6 +12,6 @@ interface IERC721Mintable is IERC721 {
     /**
      * @dev Returns the total amount of tokens stored by the contract.
      */
-    function mint(address to, uint256 tokenId) external view returns (uint256);
+    function mint(address to, uint256 tokenId) external;
 
 }

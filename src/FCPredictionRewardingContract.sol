@@ -15,7 +15,6 @@ contract FCPredictionRewardingContract {
     mapping(address => uint256) userOptions;
     mapping(address => bool) predictionChecked;
 
-    address currency;
     uint256 expectedPrice;
     uint256 expireBlock; // cannot attest after this block
     address rewardNFT;
@@ -24,11 +23,9 @@ contract FCPredictionRewardingContract {
     address dataFeedAddress;
     AggregatorV3Interface internal dataFeed;
 
+    event attestPrice(address user, uint256 option);
 
-    event attestPrice(address user, address currency, uint256 option);
-
-    constructor(address currencyAddress, uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress, address dataFeedAddress_) {
-        currency = currencyAddress;
+    constructor(uint256 price, uint256 period, address rewardNFTAddress, address proxyAddress, address dataFeedAddress_) {
         expectedPrice = price;
         expireBlock = block.number + period;
         rewardNFT = rewardNFTAddress;
@@ -43,7 +40,7 @@ contract FCPredictionRewardingContract {
     function attest(uint256 option) public {
         userOptions[msg.sender] = option;
         predictionChecked[msg.sender] = false;
-        emit attestPrice(msg.sender, currency, option);
+        emit attestPrice(msg.sender, option);
     }
 
     function attestByProxy(address user, uint256 option) public {
@@ -51,7 +48,7 @@ contract FCPredictionRewardingContract {
         require(msg.sender == proxy, "non-proxy-address");
         userOptions[user] = option;
         predictionChecked[user] = false;
-        emit attestPrice(user, currency, option);
+        emit attestPrice(user, option);
     }
 
     function compareWithOracle(address user) private view returns (bool) {

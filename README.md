@@ -8,6 +8,11 @@ The contract are
 * Compare Price with Oracle
 * Rewarding: distribute the rewards to the winers
 
+## Related Repos
+
+- [Farcaster MarketSense Scripts](https://github.com/starit/fc-prediction-scripts)
+- [Farcaster MarketSense Smart Contracts](https://github.com/starit/fc-prediction-contracts)
+- [Farcaster MarketSense Frames](https://github.com/starit/fc-prediction-frames)
 
 ## Deployed Contracts
 

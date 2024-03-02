@@ -9,6 +9,13 @@ The contract are
 * Rewarding: distribute the rewards to the winers
 
 
+## Deployed Contracts
+
+* Base: [0xDDb6BDf0E5A51d772c98FA3A29bF2297c437d6bc](https://sepolia.basescan.org/address/0x1ffc30a27acef1255bac2f58f30d20d976e15031)
+* Linea: [0x6213ff5c597c21bc0d5230dc001a09b998546410](https://sepolia.basescan.org/address/0xddb6bdf0e5a51d772c98fa3a29bf2297c437d6bc)
+* Hedera: [0x6213FF5C597c21BC0d5230DC001a09B998546410](https://hashscan.io/testnet/contract/0.0.3649867?p=1&k=1709365817.795453920)
+
+
 ## Components
 
 * Front-end: run on Vercel + Warpcaster(with Frames)

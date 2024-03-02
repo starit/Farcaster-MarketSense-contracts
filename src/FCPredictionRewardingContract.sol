@@ -11,16 +11,17 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/Ag
  */
 contract FCPredictionRewardingContract {
     uint256 public number;
+    address public owner;
 
     mapping(address => uint256) userOptions;
     mapping(address => bool) predictionChecked;
 
-    uint256 expectedPrice;
-    uint256 expireBlock; // cannot attest after this block
-    address rewardNFT;
-    uint256 rewardIndex;
-    address proxy;
-    address dataFeedAddress;
+    uint256 public expectedPrice;
+    uint256 public expireBlock; // cannot attest after this block
+    address public rewardNFT;
+    uint256 public rewardIndex;
+    address public proxy;
+    address public dataFeedAddress;
     AggregatorV3Interface internal dataFeed;
 
     event attestPrice(address user, uint256 option);
@@ -33,6 +34,7 @@ contract FCPredictionRewardingContract {
         dataFeed = AggregatorV3Interface(
             dataFeedAddress_
         );
+        owner = msg.sender;
     }
 
     // Make it general
@@ -86,10 +88,30 @@ contract FCPredictionRewardingContract {
             revert("user-already-checked");
         }
         if (!compareWithOracle(user)) {
-            // if lose
+            return;
         }
         // if win
         predictionChecked[user] = true;
         IERC721Mintable(rewardNFT).mint(user, tokenIdToMint);
+    }
+
+    function setRewardNFTAddress(address newAddress) public {
+        require(msg.sender == owner, "not-owner");
+        rewardNFT = newAddress;
+    }
+
+    function setExpectedPrice(uint256 newPrice) public {
+        require(msg.sender == owner, "not-owner");
+        expectedPrice = newPrice;
+    }
+
+    function setexpireBlock(uint256 newBlockNumber) public {
+        require(msg.sender == owner, "not-owner");
+        expireBlock = newBlockNumber;
+    }
+
+    function setOwner(address newOwner) public {
+        require(msg.sender == owner, "not-owner");
+        owner = newOwner;
     }
 }
